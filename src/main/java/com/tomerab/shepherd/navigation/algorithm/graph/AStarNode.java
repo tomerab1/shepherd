@@ -1,11 +1,14 @@
 package com.tomerab.shepherd.navigation.algorithm.graph;
 
-public class Node {
+/**
+ * Represents a node in the A* algorithm graph.
+ */
+public class AStarNode {
     private long id;
     private double lat;
     private double lon;
 
-    public Node(long id, double lat, double lon) {
+    public AStarNode(long id, double lat, double lon) {
         this.id = id;
         this.lat = lat;
         this.lon = lon;

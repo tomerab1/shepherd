@@ -1,5 +1,11 @@
 package com.tomerab.shepherd.navigation.algorithm.graph;
 
+/**
+ * Represents a generic key-value pair.
+ *
+ * @param <K> the type of the key
+ * @param <V> the type of the value
+ */
 public class Pair<K, V> {
     private K key;
     private V value;

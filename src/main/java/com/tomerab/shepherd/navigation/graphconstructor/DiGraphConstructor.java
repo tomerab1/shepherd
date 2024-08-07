@@ -13,8 +13,15 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
 import com.tomerab.shepherd.navigation.algorithm.graph.DiGraph;
-import com.tomerab.shepherd.navigation.algorithm.graph.Node;
+import com.tomerab.shepherd.navigation.algorithm.graph.AStarNode;
 
+/**
+ * The DiGraphConstructor class is responsible for constructing a directed graph
+ * (DiGraph) from XML data.
+ * It reads XML data from a specified file path and processes the nodes and ways
+ * to create nodes and edges in the graph.
+ * The constructed graph can be obtained by calling the construct() method.
+ */
 public class DiGraphConstructor {
     private final String dataPath;
     private static final String WAY_TAG = "way";
@@ -67,7 +74,7 @@ public class DiGraphConstructor {
             long id = Long.parseLong(startElement.getAttributeByName(new QName(ID_ATTR)).getValue());
             double lat = Double.parseDouble(startElement.getAttributeByName(new QName(LAT_ATTR)).getValue());
             double lon = Double.parseDouble(startElement.getAttributeByName(new QName(LON_ATTR)).getValue());
-            graph.addNode(new Node(id, lat, lon));
+            graph.addNode(new AStarNode(id, lat, lon));
         } catch (NumberFormatException e) {
             System.err.println("Error parsing node attributes: " + e.getMessage());
         }
@@ -96,9 +103,9 @@ public class DiGraphConstructor {
     }
 
     private void createEdgesFromNodeIds(DiGraph graph, List<Long> nodeIds) {
-        Node source = graph.getNodeById(nodeIds.get(0));
+        AStarNode source = graph.getNodeById(nodeIds.get(0));
         for (int i = 1; i < nodeIds.size(); i++) {
-            Node target = graph.getNodeById(nodeIds.get(i));
+            AStarNode target = graph.getNodeById(nodeIds.get(i));
             if (source != null && target != null) {
                 graph.addEdge(source, target);
             } else {
