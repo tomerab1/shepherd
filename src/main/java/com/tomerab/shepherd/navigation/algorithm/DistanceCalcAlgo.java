@@ -2,6 +2,10 @@ package com.tomerab.shepherd.navigation.algorithm;
 
 import com.tomerab.shepherd.navigation.algorithm.graph.WeightedEdge;
 
+/**
+ * Calculates the distance between two points represented by a weighted edge.
+ * Implements the Algorithm interface.
+ */
 public class DistanceCalcAlgo implements Algorithm {
     @Override
     public double calculate(WeightedEdge e1) {

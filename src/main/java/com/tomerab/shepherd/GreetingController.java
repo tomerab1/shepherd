@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tomerab.shepherd.navigation.algorithm.PathPlanner;
 import com.tomerab.shepherd.navigation.algorithm.graph.GraphNode;
-import com.tomerab.shepherd.navigation.algorithm.graph.Pair;
 
 @RestController
 public class GreetingController {
@@ -17,11 +16,12 @@ public class GreetingController {
     private final AtomicLong counter = new AtomicLong();
 
     @GetMapping("/graph")
-    public List<Pair<GraphNode, List<GraphNode>>> graph() {
-        PathPlanner planner = new PathPlanner("./data/nes-zionna.osm");
-        planner.calculateWeights();
+    public List<GraphNode> graph() {
+        PathPlanner pathPlanner = new PathPlanner("./data/nes-zionna.osm");
 
-        return null;
+        var res = pathPlanner.plan(10973273169l, 3001069274l);
+
+        return res;
     }
 
     @GetMapping("/greeting")

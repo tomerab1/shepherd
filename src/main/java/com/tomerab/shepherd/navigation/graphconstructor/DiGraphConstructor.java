@@ -1,3 +1,4 @@
+
 package com.tomerab.shepherd.navigation.graphconstructor;
 
 import java.io.BufferedInputStream;
@@ -103,15 +104,15 @@ public class DiGraphConstructor {
     }
 
     private void createEdgesFromNodeIds(DiGraph graph, List<Long> nodeIds) {
-        GraphNode source = graph.getNodeById(nodeIds.get(0));
-        graph.addEdge(source, source);
-        for (int i = 1; i < nodeIds.size(); i++) {
-            GraphNode target = graph.getNodeById(nodeIds.get(i));
+        for (int i = 0; i < nodeIds.size() - 1; i++) {
+            GraphNode source = graph.getNodeById(nodeIds.get(i));
+            GraphNode target = graph.getNodeById(nodeIds.get(i + 1));
             if (source != null && target != null) {
                 graph.addEdge(source, target);
             } else {
                 System.err.println(
-                        "Invalid node ID found during edge creation: " + nodeIds.get(i) + " or " + nodeIds.get(i + 1));
+                        "Invalid node ID found during edge creation: source ID = " + nodeIds.get(i) + ", target ID = "
+                                + nodeIds.get(i + 1));
             }
         }
     }

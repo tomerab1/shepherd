@@ -1,11 +1,6 @@
 package com.tomerab.shepherd.navigation.algorithm;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Set;
+import java.util.*;
 
 import com.tomerab.shepherd.navigation.algorithm.graph.GraphNode;
 import com.tomerab.shepherd.navigation.algorithm.graph.WeightedEdge;
@@ -28,36 +23,71 @@ public class PathPlanner {
         while (adjListIter.hasNext()) {
             var next = adjListIter.next();
             var neighbors = next.getValue();
-
-            if (neighbors.size() > 1) {
-                neighbors.forEach((edge) -> {
-                    EdgeCostCalculator calculator = new EdgeCostCalculator(edge, new HaversineCalcAlgo());
-                    edge.setWeight(calculator.calculate());
-                });
-            }
+            neighbors.forEach((edge) -> {
+                EdgeCostCalculator calculator = new EdgeCostCalculator(edge, new HaversineCalcAlgo());
+                edge.setWeight(calculator.calculate());
+            });
         }
     }
 
-    // PriorityQueue<WeightedEdge> pq = new PriorityQueue<>(
-    // (e1, e2) -> Double.compare(e1.getWeight(), e2.getWeight()));
-    public List<GraphNode> plan(GraphNode source, GraphNode dest) {
-        Set<GraphNode> closedSet = new HashSet<>();
-        Set<GraphNode> openSet = new HashSet<>();
-        openSet.add(source);
-
-        List<GraphNode> cameFrom = new ArrayList<>();
-        HashMap<Long, Double> gScore = new HashMap<>();
+    public List<GraphNode> plan(long sourceId, long destId) {
+        GraphNode source = graph.getNodeById(sourceId), dest = graph.getNodeById(destId);
+        Map<GraphNode, GraphNode> cameFrom = new HashMap<>();
+        Map<Long, Double> gScore = new HashMap<>();
         gScore.put(source.getId(), 0.0);
 
-        HashMap<Long, Double> fScore = new HashMap<>();
-        WeightedEdge sourceToDest = new WeightedEdge(source, dest);
-        EdgeCostCalculator calculator = new EdgeCostCalculator(sourceToDest, new DistanceCalcAlgo());
-        fScore.put(source.getId(), gScore.get(source.getId()) + calculator.calculate());
+        Map<Long, Double> fScore = new HashMap<>();
+        EdgeCostCalculator sourceToDestCalculator = new EdgeCostCalculator(new WeightedEdge(source, dest),
+                new DistanceCalcAlgo());
+        fScore.put(source.getId(), gScore.get(source.getId()) + sourceToDestCalculator.calculate());
+
+        Set<GraphNode> closedSet = new HashSet<>();
+        PriorityQueue<GraphNode> openSet = new PriorityQueue<>(
+                Comparator.comparingDouble(node -> fScore.get(node.getId())));
+        openSet.add(source);
 
         while (!openSet.isEmpty()) {
+            GraphNode current = openSet.poll();
+            if (current.equals(dest)) {
+                return reconstructPath(cameFrom, current);
+            }
 
+            closedSet.add(current);
+
+            for (WeightedEdge neighborEdge : graph.getNeighbors(current.getId())) {
+                GraphNode neighbor = neighborEdge.second();
+                if (closedSet.contains(neighbor)) {
+                    continue;
+                }
+
+                double tentativeGScore = gScore.get(current.getId()) + neighborEdge.getWeight();
+
+                if (!gScore.containsKey(neighbor.getId()) || tentativeGScore < gScore.get(neighbor.getId())) {
+                    cameFrom.put(neighbor, current);
+                    gScore.put(neighbor.getId(), tentativeGScore);
+
+                    EdgeCostCalculator neighborToDestCalculator = new EdgeCostCalculator(neighborEdge,
+                            new DistanceCalcAlgo());
+                    fScore.put(neighbor.getId(), tentativeGScore + neighborToDestCalculator.calculate());
+
+                    if (!openSet.contains(neighbor)) {
+                        openSet.add(neighbor);
+                    }
+                }
+            }
         }
 
         return null;
+    }
+
+    public List<GraphNode> reconstructPath(Map<GraphNode, GraphNode> cameFrom, GraphNode current) {
+        List<GraphNode> totalPath = new ArrayList<>();
+        totalPath.add(current);
+        while (cameFrom.containsKey(current)) {
+            current = cameFrom.get(current);
+            totalPath.add(current);
+        }
+        Collections.reverse(totalPath);
+        return totalPath;
     }
 }

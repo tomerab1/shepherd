@@ -27,6 +27,19 @@ public class GraphNode {
     }
 
     @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (other.getClass() != this.getClass()) {
+            return false;
+        }
+
+        GraphNode otherNode = (GraphNode) other;
+        return Double.compare(this.lat, otherNode.lat) == 0 && Double.compare(this.lon, otherNode.lon) == 0;
+    }
+
+    @Override
     public String toString() {
         return "Node(" + id + ", " + lat + ", " + lon + ")";
     }
