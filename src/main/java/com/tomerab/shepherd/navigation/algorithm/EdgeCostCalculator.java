@@ -12,6 +12,14 @@ public class EdgeCostCalculator {
         this.algo = algo;
     }
 
+    public EdgeCostCalculator(CostAlgorithm algo) {
+        this.algo = algo;
+    }
+
+    public void setEdge(WeightedEdge edge) {
+        this.edge = edge;
+    }
+
     public double calculate() {
         return algo.calculate(edge);
     }

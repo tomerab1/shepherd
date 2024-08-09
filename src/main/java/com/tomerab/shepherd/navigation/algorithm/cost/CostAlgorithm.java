@@ -7,4 +7,6 @@ import com.tomerab.shepherd.navigation.algorithm.graph.WeightedEdge;
  */
 public interface CostAlgorithm {
     public double calculate(WeightedEdge e1);
+
+    public double calculate(double lon1, double lat1, double lon2, double lat2);
 }

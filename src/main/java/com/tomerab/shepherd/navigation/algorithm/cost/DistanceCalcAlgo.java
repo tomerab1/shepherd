@@ -13,4 +13,9 @@ public class DistanceCalcAlgo implements CostAlgorithm {
         double dy = e1.first().getLat() - e1.second().getLat();
         return Math.sqrt(dx * dx + dy * dy);
     }
+
+    @Override
+    public double calculate(double lon1, double lat1, double lon2, double lat2) {
+        throw new UnsupportedOperationException("Unimplemented method 'calculate'");
+    }
 }

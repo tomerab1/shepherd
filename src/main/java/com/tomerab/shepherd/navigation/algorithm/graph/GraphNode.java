@@ -7,6 +7,7 @@ public class GraphNode {
     private long id;
     private double lat;
     private double lon;
+    private String tag;
 
     public GraphNode(long id, double lat, double lon) {
         this.id = id;
@@ -26,6 +27,14 @@ public class GraphNode {
         return lat;
     }
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -41,6 +50,6 @@ public class GraphNode {
 
     @Override
     public String toString() {
-        return "Node(" + id + ", " + lat + ", " + lon + ")";
+        return "Node[ " + tag + "](" + id + ", " + lat + ", " + lon + ")";
     }
 }

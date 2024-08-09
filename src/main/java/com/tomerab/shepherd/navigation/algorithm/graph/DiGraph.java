@@ -44,6 +44,15 @@ public class DiGraph {
         return adjList.get(idToIndex.get(id)).getKey();
     }
 
+    public void addTagToNode(long nodeId, String tag) {
+        if (!idToIndex.containsKey(nodeId)) {
+            return;
+        }
+
+        GraphNode node = getNodeById(nodeId);
+        node.setTag(tag);
+    }
+
     public List<Pair<GraphNode, List<WeightedEdge>>> getAdjList() {
         return adjList;
     }

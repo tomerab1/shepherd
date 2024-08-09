@@ -1,4 +1,3 @@
-
 package com.tomerab.shepherd.navigation.graphconstructor;
 
 import java.io.BufferedInputStream;
@@ -27,11 +26,21 @@ public class DiGraphConstructor {
     private final String dataPath;
     private static final String WAY_TAG = "way";
     private static final String ND_TAG = "nd";
+    private static final String TAG_TAG = "tag";
+    private static final String K_ATTR = "k";
     private static final String REF_ATTR = "ref";
     private static final String NODE_TAG = "node";
     private static final String ID_ATTR = "id";
     private static final String LON_ATTR = "lon";
     private static final String LAT_ATTR = "lat";
+
+    private static final List<String> TRAVERSABLE_TAGS = List.of(
+            "highway",
+            "path",
+            "footway",
+            "cycleway",
+            "track",
+            "bridleway");
 
     public DiGraphConstructor(String path) {
         this.dataPath = path;
@@ -83,6 +92,7 @@ public class DiGraphConstructor {
 
     private void processWay(XMLEventReader reader, DiGraph graph) throws XMLStreamException {
         List<Long> nodeIds = new LinkedList<>();
+        boolean isTraversable = false;
 
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
@@ -96,9 +106,19 @@ public class DiGraphConstructor {
                 long ref = Long.parseLong(startElement.getAttributeByName(new QName(REF_ATTR)).getValue());
                 nodeIds.add(ref);
             }
+
+            if (event.isStartElement() && TAG_TAG.equals(event.asStartElement().getName().getLocalPart())) {
+                StartElement startElement = event.asStartElement();
+                String k = startElement.getAttributeByName(new QName(K_ATTR)).getValue();
+
+                if (TRAVERSABLE_TAGS.contains(k)) {
+                    isTraversable = true;
+                    nodeIds.forEach((node) -> graph.addTagToNode(node, k));
+                }
+            }
         }
 
-        if (nodeIds.size() > 1) {
+        if (isTraversable && nodeIds.size() > 1) {
             createEdgesFromNodeIds(graph, nodeIds);
         }
     }
