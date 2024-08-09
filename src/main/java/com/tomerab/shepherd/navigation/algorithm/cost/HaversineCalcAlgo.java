@@ -1,4 +1,4 @@
-package com.tomerab.shepherd.navigation.algorithm;
+package com.tomerab.shepherd.navigation.algorithm.cost;
 
 import com.tomerab.shepherd.navigation.algorithm.graph.WeightedEdge;
 
@@ -7,7 +7,7 @@ import com.tomerab.shepherd.navigation.algorithm.graph.WeightedEdge;
  * method to calculate the distance between two points on the Earth's surface
  * using the Haversine formula.
  */
-public class HaversineCalcAlgo implements Algorithm {
+public class HaversineCalcAlgo implements CostAlgorithm {
     private static final double EARTH_RADIUS = 6371.0;
 
     public double calculate(WeightedEdge edge) {

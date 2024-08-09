@@ -19,7 +19,7 @@ public class GreetingController {
     public List<GraphNode> graph() {
         PathPlanner pathPlanner = new PathPlanner("./data/nes-zionna.osm");
 
-        var res = pathPlanner.plan(10973273169l, 3001069274l);
+        var res = pathPlanner.plan(2032864113l, 2339662116l);
 
         return res;
     }

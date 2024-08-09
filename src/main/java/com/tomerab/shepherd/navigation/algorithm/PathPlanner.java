@@ -4,6 +4,8 @@ import java.util.*;
 
 import com.tomerab.shepherd.navigation.algorithm.graph.GraphNode;
 import com.tomerab.shepherd.navigation.algorithm.graph.WeightedEdge;
+import com.tomerab.shepherd.navigation.algorithm.cost.DistanceCalcAlgo;
+import com.tomerab.shepherd.navigation.algorithm.cost.HaversineCalcAlgo;
 import com.tomerab.shepherd.navigation.algorithm.graph.DiGraph;
 import com.tomerab.shepherd.navigation.graphconstructor.DiGraphConstructor;
 
