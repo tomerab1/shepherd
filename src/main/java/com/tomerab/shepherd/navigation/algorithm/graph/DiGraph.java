@@ -13,7 +13,7 @@ import java.util.Map;
  * retrieve the adjacency list, and get the neighbors of a specific node.
  */
 public class DiGraph {
-    private List<Pair<AStarNode, List<AStarNode>>> adjList;
+    private List<Pair<GraphNode, List<WeightedEdge>>> adjList;
     private Map<Long, Integer> idToIndex;
 
     public DiGraph() {
@@ -21,14 +21,14 @@ public class DiGraph {
         this.idToIndex = new HashMap<>();
     }
 
-    public void addNode(AStarNode node) {
+    public void addNode(GraphNode node) {
         if (!idToIndex.containsKey(node.getId())) {
             idToIndex.put(node.getId(), adjList.size());
             adjList.add(new Pair<>(node, new ArrayList<>()));
         }
     }
 
-    public void addEdge(AStarNode source, AStarNode neighbor) {
+    public void addEdge(GraphNode source, GraphNode neighbor) {
         if (!idToIndex.containsKey(source.getId())) {
             throw new IllegalArgumentException("Error: Node with id=" + source.getId() + " is not in the graph");
         }
@@ -37,18 +37,18 @@ public class DiGraph {
         }
 
         int sourceIndex = idToIndex.get(source.getId());
-        adjList.get(sourceIndex).getValue().add(neighbor);
+        adjList.get(sourceIndex).getValue().add(new WeightedEdge(source, neighbor));
     }
 
-    public AStarNode getNodeById(long id) {
+    public GraphNode getNodeById(long id) {
         return adjList.get(idToIndex.get(id)).getKey();
     }
 
-    public List<Pair<AStarNode, List<AStarNode>>> getAdjList() {
+    public List<Pair<GraphNode, List<WeightedEdge>>> getAdjList() {
         return adjList;
     }
 
-    public List<AStarNode> getNeighbors(long nodeId) {
+    public List<WeightedEdge> getNeighbors(long nodeId) {
         if (!idToIndex.containsKey(nodeId)) {
             return null;
         }

@@ -3,12 +3,12 @@ package com.tomerab.shepherd.navigation.algorithm.graph;
 /**
  * Represents a node in the A* algorithm graph.
  */
-public class AStarNode {
+public class GraphNode {
     private long id;
     private double lat;
     private double lon;
 
-    public AStarNode(long id, double lat, double lon) {
+    public GraphNode(long id, double lat, double lon) {
         this.id = id;
         this.lat = lat;
         this.lon = lon;
